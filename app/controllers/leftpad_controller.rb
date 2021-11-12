@@ -7,8 +7,6 @@ class LeftpadController < ApplicationController
         @sticky.body = params["body"]
         @sticky.color = params["color"]
         @sticky.save
-        puts @sticky.body.to_s
-        puts @sticky.color.to_s
         redirect_to :root
     end
     def edit

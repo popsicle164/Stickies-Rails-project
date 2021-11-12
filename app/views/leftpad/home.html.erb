@@ -131,10 +131,11 @@
     <div class="banner">
         <div>
             <h1>Enter your Bubb-It® text here!</h1>
-            <form action="/create" method="create">   
+            <form action="/create" method="post">   
                 <label for="body">Text</label><input type="text" id="textbox" name="body" maxlength="60">
                 <label for="color">Color</label><input type="color" id="colorbox" name="color"><br>
                 <button name="data" type="submit">SEND IT</button>
+                <input type="hidden" name="authenticity_token" id="authenticity_token" value="<%=form_authenticity_token%>">
             </form> 
         </div>
     </div>

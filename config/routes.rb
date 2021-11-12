@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root "leftpad#home"
-  get "create", to: "leftpad#create"
+  post "create", to: "leftpad#create"
   get "edit", to: "leftpad#edit"
   get "delete", to: "leftpad#delete"
 
