@@ -124,18 +124,6 @@
         document.getElementById("word").value = id;
     }
 
-    function add_sticky(textbox,colorbox,stickies) {
-        const sticky_text = document.getElementById(textbox).value;
-        const sticky_color = document.getElementById(colorbox).value;
-        console.log(sticky_text);
-        console.log(sticky_color);
-    
-        var new_sticky = `<div class="sticky" style="background-color:${sticky_color}"><h2>${sticky_text}<h2></div>`;
-        var old_stickies = document.getElementById(stickies);
-
-        old_stickies.innerHTML += new_sticky;
-    }
-    
 </script>
 
 
@@ -146,7 +134,7 @@
             <form action="/create" method="create">   
                 <label for="body">Text</label><input type="text" id="textbox" name="body" maxlength="60">
                 <label for="color">Color</label><input type="color" id="colorbox" name="color"><br>
-                <button name="data" type="submit" onclick="add_sticky('textbox','colorbox','stickies')">SEND IT</button>
+                <button name="data" type="submit">SEND IT</button>
             </form> 
         </div>
     </div>
