@@ -4,80 +4,79 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Stickies Rails app</title>
 </head>
 
 <style>
+
+    * {
+        box-sizing: border-box;
+    }
+
     body {
         margin: 0;
         font-family:sans-serif;
+        background-color: #EBE8E2;
     }
     
     .banner {
-        height: 30vh;
-        background-color: #FF0000;
         text-shadow: 5px 5px 5px grey;
-        color: white;
-        padding: auto;
+        color: black;
+        padding: 25px;
         display: flex;
-
         justify-content: center;
         align-items: center;
+    }
+
+    .button {
+        width: 100px;
+        margin: auto;
+        border-radius: 15px;
+        font-weight: bold;
+        background-color: lightgrey;
+    }
+
+    .button:hover {
+        background-color: silver;
+        cursor: pointer;
     }
 
     form {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        width:100%;
     }
 
     input[type="text"] {
-        position: relative;
         width: 100%;
-        height: 4vh;
-        display: block;
-        margin: 0 auto;
+        height: 25px;
+        margin-bottom: 15px;
         background-color: rgba(255, 255, 255, 0.383);
-    }
-
-    h2 {
-        padding: auto;
-        font-size: 2vh;
     }
 
     .sticky_area {
         display: flex;
         flex-flow: row wrap;
-        justify-content: flex-start;
-        align-items: space-between;
-        padding: auto;
-        text-align: center;
-        text-justify: center;
-        position: relative;
+        justify-content: space-evenly;
+        padding: 25px;
     }
 
     .sticky {
-        margin: 1vh;
         color:white;
         text-shadow: 5px 5px 5px grey;
-        animation: bgColor2 5s infinite ease-in-out;
+        text-align: center;
         box-shadow: 10px 10px 5px grey;
-        height: 15vh;
-        width: 15vh;
-        overflow-wrap: break-word;
+        height: 125px;
+        width: 125px;
         overflow: hidden;
+        margin: 10px;
     }
 
     .show-image {
         position: relative;
         float:left;
-        margin:5px;
     }
 
-    .show-image:hover img{
-        opacity:0.5;
-    }
     .show-image:hover button {
         display: block;
         background-color: transparent;
@@ -102,13 +101,42 @@
         cursor: pointer;
     }
 
-    .secret {
+    .modal {
         display: none;
-        position: absolute;
-        height: 45vh;
-        width: 45vh;
-        backdrop-filter: blur(20px) brightness(50%) opacity(20%);
-        margin: auto 0;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.8);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .secretContainer {
+        width: 250px;
+    }
+
+    .secret {
+        width: 250px;
+        height: 250px;
+    }
+
+    .close {
+        color: white;
+        text-align: right;
+    }
+
+    .close:hover, .close:focus {
+        color: rgba(145, 145, 145, 0.8);
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .xSymbol {
+        font-size: 24px;
     }
 
 </style>
@@ -116,25 +144,41 @@
 <script>
 
     function edit (id,body,color) {
-        document.getElementById("secret").style.display = "block";
-        console.log(document.getElementById("secret"));
+        document.getElementById("modal").style.display = "flex";
         document.getElementById("secret").style.background = color;
         document.getElementById("edit_textbox").value = body;
         document.getElementById("edit_colorbox").value = color;
         document.getElementById("word").value = id;
     }
 
+    function cancel () {
+        document.getElementById("modal").style.display = "none";
+    }
+
 </script>
 
 
 <body>
+    <div class="modal" id="modal">
+        <div class="secretContainer">
+            <div class="close" onclick="cancel()"><span class="xSymbol">&times;</span> Close</div>
+            <div class="banner secret" id="secret">
+                <form action="/edit" method="edit">   
+                    <label for="body">Text</label><input type="text" id="edit_textbox" name="body" maxlength="40">
+                    <label for="color">Color</label><input type="color" id="edit_colorbox" name="color"><br>
+                    <button name="data" type="submit" class="button">UPDATE IT</button>
+                    <input id="word" type="hidden" name="id">
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="banner">
         <div>
-            <h1>Enter your Bubb-It® text here!</h1>
+            <h1>Make a sticky note!</h1>
             <form action="/create" method="post">   
-                <label for="body">Text</label><input type="text" id="textbox" name="body" maxlength="60">
+                <label for="body">Text</label><input type="text" id="textbox" name="body" maxlength="40">
                 <label for="color">Color</label><input type="color" id="colorbox" name="color"><br>
-                <button name="data" type="submit">SEND IT</button>
+                <button name="data" type="submit" class="button">ADD IT</button>
                 <input type="hidden" name="authenticity_token" id="authenticity_token" value="<%=form_authenticity_token%>">
             </form> 
         </div>
@@ -142,25 +186,14 @@
     <div class="sticky_area" id="stickies">
         <%@stickies.each do |sticky|%>
             <div id="<%=sticky.id%>" class="sticky show-image" style="background-color: <%=sticky.color%>">
-                <h2><%=sticky.body%></h2>
+                <p><%=sticky.body%></p>
                 <button class="update" onclick="edit('<%=sticky.id%>','<%=sticky.body%>','<%=sticky.color%>')"></button>
                 <form action="/delete" method="delete">
                     <button class="delete" type="submit"></button>
                     <input type="hidden" name="id" value="<%=sticky.id%>">
                 </form>
             </div>
-            <%puts sticky.color%>
         <%end%>
-        <div class="banner secret" id="secret">
-            <h1>Enter your Bubb-It® text here!</h1>
-                <form action="/edit" method="edit">   
-                    <label for="body">Text</label><input type="text" id="edit_textbox" name="body" maxlength="60">
-                    <label for="color">Color</label><input type="color" id="edit_colorbox" name="color"><br>
-                    <button name="data" type="submit">UPDATE IT</button>
-                    <input id="word" type="hidden" name="id">
-                </form>
-        </div>
     </div>
-
 </body>
 </html>
