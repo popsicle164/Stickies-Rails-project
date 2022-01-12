@@ -1,24 +1,8 @@
-# README
+Ruby on Rails single-page app that allows users to manipulate sticky notes with CRUD functionality.
+- Can create a sticky with customized color and message.
+- View all stickies in single view.
+- Can hover over stickies for Update and Delete functions
+- Update opens modal view to edit
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Next steps:
+- Add database column "Order" to rearrange order of stickies with drag and drop
